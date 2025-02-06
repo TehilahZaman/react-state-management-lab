@@ -1,4 +1,6 @@
 // src/App.jsx
+import { useState } from "react";
+import "./App.css";
 
 const App = () => {
   const [team, setTeam] = useState([]);
@@ -86,60 +88,88 @@ const App = () => {
     },
   ]);
 
-  let message = ""
+  let totalStrength;
+  let totalAgility;
+  let message;
   const handleAddFighter = (fighter) => {
-    if (money < fighter.price) {
-      message = "Not Enough Money "
-      return 
- } 
-    const newTeam = [...team, fighter];
-    const newMember = fighter.id;
-    const newZombieFighters = zombieFighters.filter(newMember);
-    setTeam(newTeam);
-    setZombieFighters(newZombieFighters);
-    const newMoney = money - fighter.price
-    setMoney(newMoney)
-   message = ""
+    setTeam([...team, fighter]);
+
+    setZombieFighters(
+      zombieFighters.filter((thisFighter) => thisFighter.id !== fighter.id)
+    );
+    setMoney(money - fighter.price);
   };
 
-  const handleARemoveFighter = (fighter) => {
-    const removedFighter = fighter.id
-    const newTeam = team.remove(removedFighter)
-    setTeam(newTeam)
-    const newZombieFighters = [...zombieFighters, removedFighter]
-    setZombieFighters(newZombieFighters)
-    const newMoney = money + fighter.price
-    setMoney(newMoney)
-  }
-
-  let totalStrength = 
-  let totalAility = 
-  if (team.length === 0) {"Pick some team members!"}
+  const handleRemoveFighter = (fighter) => {
+    setTeam(team.filter((thisFighter) => thisFighter.id !== fighter.id));
+    setZombieFighters([...zombieFighters, fighter]);
+    setMoney(money + fighter.price);
+  };
 
   return (
-    const allFighters = zombieFighters.map((fighter) => (
     <>
-        <div>{money}</div>
-        <div>{message} </div>
-      <p>
-        {fighter.img}
-        Fighter Name: {fighter.name}${fighter.price}
-        Strength: {fighter.strength}
-        Agility: {fighter.agility}
-      </p>
-        <button onClick={() => handleAddFighter(fighter.id)}>Add Fighter</button>
-        const allTeamMembers = team.map(fighter) => (
-        {fighter.img}
-        Fighter Name: {fighter.name}${fighter.price}
-        Strength: {fighter.strength}
-        Agility: {fighter.agility}
-        <button onClick={()=>handleRemoveFighter(fighter.id)}>Remove FIghter</button>
-        )
-      </>
-    )
-  ));
+      <div className="notice">Total Money: ${money}</div>
+      <div className="notice">{message}</div>
+      <div>
+        <ul>
+          {zombieFighters.map((fighter, idx) => (
+            <ol key={idx}>
+              {money < fighter.price ? <div>Not Enough Money!</div> : null}
+              <img src={fighter.img} />
+              <p>Fighter Name: {fighter.name}</p>
+              <p>Price: ${fighter.price}</p>
+              <p>Strength: {fighter.strength}</p>
+              <p>Agility: {fighter.agility}</p>
+
+              <button onClick={() => handleAddFighter(fighter)}>
+                Add Fighter
+              </button>
+            </ol>
+          ))}
+        </ul>
+      </div>
+      {team.length === 0 ? (
+        <div className="notice">Pick some team members!</div>
+      ) : (
+        <div className="notice"> YOUR FIGHTING TEAM! </div>
+      )}
+      <div className="notice">
+        Team Strength:{" "}
+        {
+          (totalStrength = team.reduce(
+            (acc, fighter) => acc + fighter.strength,
+            0
+          ))
+        }
+      </div>
+
+      <div className="notice">
+        Team Agility:{" "}
+        {
+          (totalAgility = team.reduce(
+            (acc, fighter) => acc + fighter.agility,
+            0
+          ))
+        }{" "}
+      </div>
+      <div>
+        <ul>
+          {team.map((fighter, idx) => (
+            <ol key={idx}>
+              <img src={fighter.img} />
+              <p>Fighter Name: {fighter.name}</p>
+              <p>${fighter.price}</p>
+              <p>Strength: {fighter.strength}</p>
+              <p>Agility: {fighter.agility}</p>
+              <button onClick={() => handleRemoveFighter(fighter)}>
+                Remove Fighter
+              </button>
+            </ol>
+          ))}
+        </ul>
+      </div>
+    </>
+  );
 };
 
 export default App;
-
-// Display the current value of money in the UI.???

@@ -8,9 +8,16 @@ ul {
 }
 
 li {
+  display: inline;
   list-style: none;
   margin: 8px;
   padding: 8px;
   border: whitesmoke 3px solid;
   border-radius: 8px;
+}
+
+.notice {
+  text-align: center;
+  padding: 5px;
+  margin: 5px;
 }
